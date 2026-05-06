@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "allow": ["npm install", "npm run dev", "npm run build", "git init", "pip install", "uvicorn", "playwright install", "npx tsc"]
+  }
+}

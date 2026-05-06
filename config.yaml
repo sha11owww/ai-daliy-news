@@ -1,0 +1,39 @@
+app:
+  name: "AI Daily"
+  timezone: "Asia/Shanghai"
+  publish_hour: 7
+  publish_minute: 30
+
+collector:
+  interval_hours: 24
+  max_articles_per_source: 30
+  sources:
+    linuxdo:
+      enabled: true
+      base_url: "https://linux.do"
+      category_ids: [7, 32, 41]
+    reddit:
+      enabled: true
+      subreddits:
+        - "artificial"
+        - "MachineLearning"
+        - "LocalLLaMA"
+    twitter:
+      enabled: false
+
+agent:
+  model: "deepseek-chat"
+  temperature: 0.3
+  max_retries: 2
+  reflection_enabled: true
+  daily_report:
+    max_headlines: 3
+    max_briefs: 12
+    summary_max_length: 200
+    brief_max_length: 50
+
+database:
+  url: "postgresql+asyncpg://postgres:postgres@localhost:5432/ainews"
+
+redis:
+  url: "redis://localhost:6379/0"
