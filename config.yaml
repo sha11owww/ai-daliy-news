@@ -21,11 +21,15 @@ collector:
         - "artificial"
         - "MachineLearning"
         - "LocalLLaMA"
+    rss:
+      enabled: true
+      feed_urls:
+        - "https://36kr.com/feed"
     twitter:
       enabled: false
 
 agent:
-  model: "deepseek-chat"
+  model: "deepseek-v4-flash"
   temperature: 0.3
   max_tokens: 1024
   timeout: 60
