@@ -3,10 +3,13 @@ app:
   timezone: "Asia/Shanghai"
   publish_hour: 7
   publish_minute: 30
+  log_level: "info"
+  language: "zh-CN"
 
 collector:
   interval_hours: 24
   max_articles_per_source: 30
+  timeout: 30
   sources:
     linuxdo:
       enabled: true
@@ -24,6 +27,8 @@ collector:
 agent:
   model: "deepseek-chat"
   temperature: 0.3
+  max_tokens: 1024
+  timeout: 60
   max_retries: 2
   reflection_enabled: true
   daily_report:
@@ -31,9 +36,8 @@ agent:
     max_briefs: 12
     summary_max_length: 200
     brief_max_length: 50
+    language: "zh-CN"
 
 database:
-  url: "postgresql+asyncpg://postgres:postgres@localhost:5432/ainews"
-
-redis:
-  url: "redis://localhost:6379/0"
+  pool_size: 5
+  max_overflow: 10
