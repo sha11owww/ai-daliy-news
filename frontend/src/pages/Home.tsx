@@ -5,17 +5,26 @@ import Header from '../components/Header';
 import FilterBar from '../components/FilterBar';
 import Card from '../components/Card';
 
+type SessionTab = 'morning' | 'evening';
+
 export default function Home() {
-  const [report, setReport] = useState<DailyReport | null>(null);
+  const [morningReport, setMorningReport] = useState<DailyReport | null>(null);
+  const [eveningReport, setEveningReport] = useState<DailyReport | null>(null);
+  const [activeSession, setActiveSession] = useState<SessionTab>('morning');
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTodayReport().then((data) => {
-      setReport(data);
+      if (data) {
+        setMorningReport(data.morning);
+        setEveningReport(data.evening);
+      }
       setLoading(false);
     });
   }, []);
+
+  const report = activeSession === 'morning' ? morningReport : eveningReport;
 
   if (loading) {
     return (
@@ -25,21 +34,55 @@ export default function Home() {
     );
   }
 
+  const sessionTabs = (
+    <div className="flex gap-1 bg-card rounded-lg p-1 max-w-fit mx-auto mb-6">
+      <button
+        onClick={() => { setActiveSession('morning'); setActiveSection(null); }}
+        className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+          activeSession === 'morning'
+            ? 'bg-white text-ink-dark shadow-sm'
+            : 'text-ink-light hover:text-ink-dark'
+        }`}
+      >
+        ☀️ 早报
+        {morningReport && (
+          <span className="ml-1.5 text-xs text-green-600">已出</span>
+        )}
+      </button>
+      <button
+        onClick={() => { setActiveSession('evening'); setActiveSection(null); }}
+        className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
+          activeSession === 'evening'
+            ? 'bg-white text-ink-dark shadow-sm'
+            : 'text-ink-light hover:text-ink-dark'
+        }`}
+      >
+        🌙 晚报
+        {eveningReport && (
+          <span className="ml-1.5 text-xs text-green-600">已出</span>
+        )}
+      </button>
+    </div>
+  );
+
   if (!report) {
+    const today = new Date().toLocaleDateString('zh-CN');
     return (
       <div className="min-h-screen bg-paper">
-        <Header title="AI Daily" date={new Date().toLocaleDateString('zh-CN')} />
-        <main className="max-w-3xl mx-auto px-4 py-12 text-center">
-          <p className="text-ink-light text-lg">今日日报正在编辑中，请稍后再来 📝</p>
+        <Header title="AI Daily" date={today} />
+        <main className="max-w-3xl mx-auto px-4 py-8">
+          {sessionTabs}
+          <p className="text-ink-light text-lg text-center py-12">
+            今日{activeSession === 'morning' ? '早报' : '晚报'}正在编辑中，请稍后再来 📝
+          </p>
         </main>
       </div>
     );
   }
 
   const sections = report.sections || [];
-  const headlines = report.articles.filter((a) => a.importance_score >= 4);
-  const others = report.articles.filter((a) => a.importance_score < 4);
-
+  const headlines = report.articles?.filter((a) => a.importance_score >= 4) || [];
+  const others = report.articles?.filter((a) => a.importance_score < 4) || [];
   const filteredOthers = activeSection
     ? others.filter((a) => a.section === activeSection)
     : others;
@@ -49,6 +92,8 @@ export default function Home() {
       <Header title={report.title} date={report.report_date} />
 
       <main className="max-w-3xl mx-auto px-4 py-6">
+        {sessionTabs}
+
         {sections.length > 0 && (
           <div className="mb-6">
             <FilterBar
