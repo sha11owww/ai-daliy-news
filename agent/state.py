@@ -24,6 +24,7 @@ class ArticleState(TypedDict):
 class DailyReportState(TypedDict):
     """日报状态：LangGraph 工作流的全局状态"""
     report_date: str
+    session_type: str           # morning | evening
     title: str
     raw_articles: list[dict]
     processed_articles: list[ArticleState]

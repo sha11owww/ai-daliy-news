@@ -1,4 +1,5 @@
 import asyncio
+import json
 import yaml
 from datetime import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -9,14 +10,15 @@ from api.repositories.article_repo import ArticleRepository
 from api.repositories.report_repo import ReportRepository
 
 
-async def run_daily_pipeline():
-    """执行每天的日报生成流程"""
-    print(f"[{datetime.now()}] 开始执行日报流程...")
+async def run_daily_pipeline(session_type: str = "morning"):
+    """执行指定时段的日报生成流程"""
+    print(f"[{datetime.now()}] 开始执行 {session_type} 日报流程...")
 
     # 步骤 1：运行 Agent
     agent = build_agent()
     result = await agent.ainvoke({
         "report_date": datetime.now().strftime("%Y-%m-%d"),
+        "session_type": session_type,
         "title": "",
         "raw_articles": [],
         "processed_articles": [],
@@ -24,7 +26,7 @@ async def run_daily_pipeline():
         "sections": [],
         "editor_notes": "",
         "status": "draft",
-    })
+    }, {"configurable": {"thread_id": f"daily-{session_type}"}})
 
     # 步骤 2：持久化到数据库
     async with async_session() as session:
@@ -41,7 +43,7 @@ async def run_daily_pipeline():
                     "source": a["source"],
                     "source_id": a.get("source_id", ""),
                     "raw_content": a.get("raw_content", ""),
-                    "metadata": a.get("metadata", {}),
+                    "metadata": json.dumps(a.get("metadata", {}), ensure_ascii=False),
                 }])
                 if aid:
                     await article_repo.update_article(aid[0], {
@@ -58,7 +60,9 @@ async def run_daily_pipeline():
 
         # 创建或更新日报
         today = datetime.now().date()
-        report_id = await report_repo.create(today, result.get("title", f"AI日报 · {today}"))
+        prefix = "AI早报" if session_type == "morning" else "AI晚报"
+        title = result.get("title", f"{prefix} · {today}")
+        report_id = await report_repo.create(today, title, session_type)
         await report_repo.update(report_id, {
             "article_order": article_ids,
             "sections": result.get("sections", []),
@@ -67,22 +71,25 @@ async def run_daily_pipeline():
             "status": "published",
         })
 
-    print(f"[{datetime.now()}] 日报流程完成。共发布 {len(article_ids)} 篇文章。")
+    print(f"[{datetime.now()}] {session_type}日报流程完成。共发布 {len(article_ids)} 篇文章。")
 
 
 def start_scheduler():
-    """启动定时调度器"""
-    scheduler = AsyncIOScheduler()
+    """启动定时调度器（双时段：早报 + 晚报）"""
+    scheduler = AsyncIOScheduler(timezone="Asia/Shanghai")
 
     with open("config.yaml", "r") as f:
         config = yaml.safe_load(f)
 
-    hour = config.get("app", {}).get("publish_hour", 7)
-    minute = config.get("app", {}).get("publish_minute", 30)
+    pub = config.get("app", {}).get("publish", {})
+    morning = pub.get("morning", {"hour": 7, "minute": 0})
+    evening = pub.get("evening", {"hour": 21, "minute": 0})
 
-    scheduler.add_job(run_daily_pipeline, "cron", hour=hour, minute=minute)
+    scheduler.add_job(run_daily_pipeline, "cron", hour=morning["hour"], minute=morning["minute"], args=["morning"])
+    scheduler.add_job(run_daily_pipeline, "cron", hour=evening["hour"], minute=evening["minute"], args=["evening"])
+
     scheduler.start()
-    print(f"调度器已启动。每天 {hour:02d}:{minute:02d} 自动执行日报流程。")
+    print(f"调度器已启动。早报 {morning['hour']:02d}:{morning['minute']:02d} / 晚报 {evening['hour']:02d}:{evening['minute']:02d}")
 
     try:
         asyncio.get_event_loop().run_forever()

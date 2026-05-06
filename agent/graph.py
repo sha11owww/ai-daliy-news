@@ -148,10 +148,12 @@ FIXED_SECTIONS = ["行业重磅", "技术内核", "AIGC 多模态", "产品应�
 
 
 async def layout_node(state: DailyReportState) -> dict:
-    """节点 7：Agent 按固定 5 栏目排版"""
+    """节点 7：按固定 5 栏目排版"""
     articles = state.get("processed_articles", [])
     today = date.today()
-    title_str = f"AI日报 · {today.strftime('%Y年%m月%d日')}"
+    session_type = state.get("session_type", "morning")
+    prefix = "AI早报" if session_type == "morning" else "AI晚报"
+    title_str = f"{prefix} · {today.strftime('%Y年%m月%d日')}"
 
     # 按重要度排序
     sorted_arts = sorted(articles, key=lambda a: -a["importance_score"])
