@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS articles (
     title TEXT NOT NULL,
     url TEXT NOT NULL UNIQUE,
     source VARCHAR(50) NOT NULL,          -- linuxdo/reddit/twitter
-    source_id TEXT,
+    source_id VARCHAR(100),
     raw_content TEXT,
     cleaned_text TEXT,
     summary TEXT,                         -- AI 生成的详细摘要
@@ -28,8 +28,26 @@ CREATE TABLE IF NOT EXISTS daily_reports (
     editor_notes TEXT,
     total_articles INTEGER DEFAULT 0,
     status VARCHAR(20) DEFAULT 'draft',
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- updated_at 自动更新触发器
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_articles_updated_at
+    BEFORE UPDATE ON articles
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER trg_reports_updated_at
+    BEFORE UPDATE ON daily_reports
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 CREATE INDEX idx_articles_status ON articles(status);
 CREATE INDEX idx_articles_published_date ON articles(published_date);
