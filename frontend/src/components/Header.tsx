@@ -10,7 +10,15 @@ export default function Header({ title, date }: HeaderProps) {
         <a href="/" className="text-xl font-bold text-ink-dark no-underline">
           📰 {title}
         </a>
-        <time className="text-sm text-ink-light">{date}</time>
+        <div className="flex items-center gap-4">
+          <time className="text-sm text-ink-light">{date}</time>
+          <a
+            href="/archive"
+            className="text-sm text-ink-light hover:text-ink-dark underline underline-offset-2"
+          >
+            📅 历史日历
+          </a>
+        </div>
       </div>
     </header>
   );
