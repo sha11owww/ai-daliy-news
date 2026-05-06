@@ -10,8 +10,9 @@ export default function Archive() {
   const [viewMonth, setViewMonth] = useState(today.getMonth() + 1);
   const [calendarData, setCalendarData] = useState<CalendarEntry[]>([]);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedSession, setSelectedSession] = useState<'morning' | 'evening'>('morning');
-  const [detailReport, setDetailReport] = useState<DailyReport | null>(null);
+  const [detailReports, setDetailReports] = useState<{ morning: DailyReport | null; evening: DailyReport | null }>({
+    morning: null, evening: null,
+  });
   const [detailLoading, setDetailLoading] = useState(false);
 
   const dateMap = new Map<string, string[]>();
@@ -21,28 +22,26 @@ export default function Archive() {
     fetchCalendar(viewYear, viewMonth).then(setCalendarData);
   }, [viewYear, viewMonth]);
 
-  const handleDateClick = useCallback((dateStr: string) => {
+  const handleDateClick = useCallback(async (dateStr: string) => {
     setSelectedDate(dateStr);
+    setDetailLoading(true);
+    setDetailReports({ morning: null, evening: null });
+
     const sessions = dateMap.get(dateStr) || [];
-    const session: 'morning' | 'evening' = sessions.includes('morning') ? 'morning' : 'evening';
-    setSelectedSession(session);
+    const results: { morning: DailyReport | null; evening: DailyReport | null } = {
+      morning: null,
+      evening: null,
+    };
 
-    setDetailLoading(true);
-    fetchReportByDateAndSession(dateStr, session).then((report) => {
-      setDetailReport(report);
-      setDetailLoading(false);
-    });
+    for (const s of sessions) {
+      const report = await fetchReportByDateAndSession(dateStr, s as 'morning' | 'evening');
+      if (report) {
+        results[s as 'morning' | 'evening'] = report;
+      }
+    }
+    setDetailReports(results);
+    setDetailLoading(false);
   }, [dateMap]);
-
-  const handleSessionSwitch = useCallback((session: 'morning' | 'evening') => {
-    if (!selectedDate) return;
-    setSelectedSession(session);
-    setDetailLoading(true);
-    fetchReportByDateAndSession(selectedDate, session).then((report) => {
-      setDetailReport(report);
-      setDetailLoading(false);
-    });
-  }, [selectedDate]);
 
   const goPrevMonth = () => {
     if (viewMonth === 1) {
@@ -52,7 +51,7 @@ export default function Archive() {
       setViewMonth(viewMonth - 1);
     }
     setSelectedDate(null);
-    setDetailReport(null);
+    setDetailReports({ morning: null, evening: null });
   };
 
   const goNextMonth = () => {
@@ -63,7 +62,7 @@ export default function Archive() {
       setViewMonth(viewMonth + 1);
     }
     setSelectedDate(null);
-    setDetailReport(null);
+    setDetailReports({ morning: null, evening: null });
   };
 
   const firstDay = new Date(viewYear, viewMonth - 1, 1).getDay();
@@ -145,7 +144,7 @@ export default function Archive() {
 
         {/* 右侧日报详情 */}
         <div className="flex-1 min-w-0">
-          {!selectedDate && (
+          {!selectedDate && !detailLoading && (
             <div className="flex items-center justify-center h-64 text-ink-light">
               <p>📅 点击日历中的日期查看历史日报</p>
             </div>
@@ -157,43 +156,33 @@ export default function Archive() {
             </div>
           )}
 
-          {detailReport && !detailLoading && (
-            <div>
-              {/* 时段切换 */}
-              <div className="flex gap-2 mb-4">
-                {(dateMap.get(selectedDate!) || []).includes('morning') && (
-                  <button onClick={() => handleSessionSwitch('morning')}
-                    className={`px-3 py-1 rounded text-sm ${
-                      selectedSession === 'morning'
-                        ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-                        : 'bg-card text-ink-light hover:text-ink-dark'
-                    }`}>
-                    ☀️ 早报
-                  </button>
-                )}
-                {(dateMap.get(selectedDate!) || []).includes('evening') && (
-                  <button onClick={() => handleSessionSwitch('evening')}
-                    className={`px-3 py-1 rounded text-sm ${
-                      selectedSession === 'evening'
-                        ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                        : 'bg-card text-ink-light hover:text-ink-dark'
-                    }`}>
-                    🌙 晚报
-                  </button>
-                )}
-              </div>
-
-              <h2 className="text-xl font-bold text-ink-dark mb-2">{detailReport.title}</h2>
-              <p className="text-xs text-ink-light mb-4">共 {detailReport.total_articles} 篇</p>
-
-              {detailReport.articles && detailReport.articles.length > 0 ? (
-                <div className="flex flex-col gap-3">
-                  {detailReport.articles.map((article) => (
-                    <Card key={article.id} article={article} isHeadline={article.importance_score >= 4} />
-                  ))}
+          {!detailLoading && (detailReports.morning || detailReports.evening) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {detailReports.morning && (
+                <div>
+                  <h3 className="text-base font-bold text-ink-dark mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                    ☀️ 早报 · {detailReports.morning.total_articles}篇
+                  </h3>
+                  <div className="flex flex-col gap-2">
+                    {detailReports.morning.articles?.map((article) => (
+                      <Card key={article.id} article={article} />
+                    ))}
+                  </div>
                 </div>
-              ) : (
-                <p className="text-ink-light">该日报暂无文章</p>
+              )}
+              {detailReports.evening && (
+                <div>
+                  <h3 className="text-base font-bold text-ink-dark mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500" />
+                    🌙 晚报 · {detailReports.evening.total_articles}篇
+                  </h3>
+                  <div className="flex flex-col gap-2">
+                    {detailReports.evening.articles?.map((article) => (
+                      <Card key={article.id} article={article} />
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           )}

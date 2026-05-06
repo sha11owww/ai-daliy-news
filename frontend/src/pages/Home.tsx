@@ -35,33 +35,35 @@ export default function Home() {
   }
 
   const sessionTabs = (
-    <div className="flex gap-1 bg-card rounded-lg p-1 max-w-fit mx-auto mb-6">
-      <button
-        onClick={() => { setActiveSession('morning'); setActiveSection(null); }}
-        className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-          activeSession === 'morning'
-            ? 'bg-white text-ink-dark shadow-sm'
-            : 'text-ink-light hover:text-ink-dark'
-        }`}
-      >
-        ☀️ 早报
-        {morningReport && (
-          <span className="ml-1.5 text-xs text-green-600">已出</span>
-        )}
-      </button>
-      <button
-        onClick={() => { setActiveSession('evening'); setActiveSection(null); }}
-        className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-          activeSession === 'evening'
-            ? 'bg-white text-ink-dark shadow-sm'
-            : 'text-ink-light hover:text-ink-dark'
-        }`}
-      >
-        🌙 晚报
-        {eveningReport && (
-          <span className="ml-1.5 text-xs text-green-600">已出</span>
-        )}
-      </button>
+    <div className="max-w-3xl mx-auto px-4 pt-4 pb-2">
+      <div className="flex items-center gap-3 text-sm">
+        <button
+          onClick={() => { setActiveSession('morning'); setActiveSection(null); }}
+          className={`transition-colors ${
+            activeSession === 'morning' ? 'text-ink-dark font-medium' : 'text-ink-light hover:text-ink-dark'
+          }`}
+        >
+          ☀️ 早报
+        </button>
+        <span className="text-border">·</span>
+        <button
+          onClick={() => { setActiveSession('evening'); setActiveSection(null); }}
+          className={`transition-colors ${
+            activeSession === 'evening' ? 'text-ink-dark font-medium' : 'text-ink-light hover:text-ink-dark'
+          }`}
+        >
+          🌙 晚报
+        </button>
+        {/* 显示已出状态 */}
+        <span className="ml-auto text-xs text-ink-light">
+          {activeSession === 'morning' && morningReport ? '✅ 已出' : ''}
+          {activeSession === 'evening' && eveningReport ? '✅ 已出' : ''}
+          {activeSession === 'morning' && !morningReport ? '⏳ 待发布' : ''}
+          {activeSession === 'evening' && !eveningReport ? '⏳ 待发布' : ''}
+        </span>
+      </div>
+      {/* 时间线装饰线 */}
+      <div className="mt-2 h-px bg-border" />
     </div>
   );
 
