@@ -1,5 +1,4 @@
-from typing import TypedDict, Optional, Annotated
-from operator import add
+from typing import TypedDict, Optional
 
 
 class ArticleState(TypedDict):
@@ -27,7 +26,7 @@ class DailyReportState(TypedDict):
     report_date: str
     title: str
     raw_articles: list[dict]
-    processed_articles: Annotated[list[ArticleState], add]
+    processed_articles: list[ArticleState]
     selected_article_ids: list[int]
     sections: list[dict]
     editor_notes: str

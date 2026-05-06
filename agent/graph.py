@@ -136,6 +136,7 @@ async def classify_node(state: DailyReportState) -> dict:
 
         result = await classify(a)
         a["tags"] = result.get("tags", ["ai"])
+        a["section"] = result.get("section", "行业重磅")
         a["importance_score"] = result.get("importance_score", 3)
         a["status"] = "classified"
         updated.append(a)
@@ -143,8 +144,11 @@ async def classify_node(state: DailyReportState) -> dict:
     return {"processed_articles": updated}
 
 
+FIXED_SECTIONS = ["行业重磅", "技术内核", "AIGC 多模态", "产品应用与工具", "商业政策"]
+
+
 async def layout_node(state: DailyReportState) -> dict:
-    """节点 7：Agent 规划日报版面（栏目和排序）"""
+    """节点 7：Agent 按固定 5 栏目排版"""
     articles = state.get("processed_articles", [])
     today = date.today()
     title_str = f"AI日报 · {today.strftime('%Y年%m月%d日')}"
@@ -152,21 +156,24 @@ async def layout_node(state: DailyReportState) -> dict:
     # 按重要度排序
     sorted_arts = sorted(articles, key=lambda a: -a["importance_score"])
 
-    # 根据标签聚类生成栏目
-    sections = []
-    section_map = {}
+    # 按固定栏目分组
+    section_articles = {s: [] for s in FIXED_SECTIONS}
     for a in sorted_arts:
-        tags = a.get("tags", [])
-        primary_tag = tags[0] if tags else "综合"
-        if primary_tag not in section_map:
-            section_map[primary_tag] = {
-                "name": primary_tag,
-                "article_ids": [],
-            }
-        section_map[primary_tag]["article_ids"].append(a.get("id", 0))
+        sec = a.get("section") or "行业重磅"
+        if sec in section_articles:
+            section_articles[sec].append(a)
+        else:
+            section_articles["行业重磅"].append(a)
 
-    sections = list(section_map.values())
-    article_ids = [a.get("id", 0) for a in sorted_arts]
+    # 生成栏目结构（只保留有文章的栏目）
+    sections = []
+    article_ids = []
+    for sec in FIXED_SECTIONS:
+        sec_arts = section_articles[sec]
+        if sec_arts:
+            sections.append({"name": sec, "article_ids": [a.get("id", 0) for a in sec_arts]})
+            for a in sec_arts:
+                article_ids.append(a.get("id", 0))
 
     return {
         "sections": sections,

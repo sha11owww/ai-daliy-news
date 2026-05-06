@@ -1,3 +1,4 @@
+import os
 import httpx
 from bs4 import BeautifulSoup
 
@@ -7,8 +8,13 @@ async def fetch_content(url: str) -> str:
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     }
+    proxy = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
+    client_kwargs = {"headers": headers, "timeout": 30.0, "follow_redirects": True}
+    if proxy:
+        client_kwargs["proxy"] = proxy
+
     try:
-        async with httpx.AsyncClient(headers=headers, timeout=30.0, follow_redirects=True) as client:
+        async with httpx.AsyncClient(**client_kwargs) as client:
             resp = await client.get(url)
             resp.raise_for_status()
             soup = BeautifulSoup(resp.text, "lxml")

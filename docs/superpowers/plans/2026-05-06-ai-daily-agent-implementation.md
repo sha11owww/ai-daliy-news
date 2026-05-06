@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS articles (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     url TEXT NOT NULL UNIQUE,
-    source VARCHAR(50) NOT NULL,          -- linuxdo/reddit/twitter
+    source VARCHAR(50) NOT NULL,          -- linuxdo/reddit/twitter ...
     source_id TEXT,
     raw_content TEXT,
     cleaned_text TEXT,

@@ -15,7 +15,7 @@ class ArticleRepository:
             return []
         stmt = """
             INSERT INTO articles (title, url, source, source_id, raw_content, status, metadata)
-            VALUES (:title, :url, :source, :source_id, :raw_content, 'raw', :metadata::jsonb)
+            VALUES (:title, :url, :source, :source_id, :raw_content, 'raw', CAST(:metadata AS JSONB))
             ON CONFLICT (url) DO UPDATE SET raw_content = EXCLUDED.raw_content
             RETURNING id
         """

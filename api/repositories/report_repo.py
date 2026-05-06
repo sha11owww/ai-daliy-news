@@ -1,4 +1,5 @@
 from datetime import date
+import json
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import text
 
@@ -22,11 +23,17 @@ class ReportRepository:
         return result.scalar_one()
 
     async def update(self, report_id: int, updates: dict) -> None:
-        """更新日报字段"""
-        sets = ", ".join(f"{k} = :{k}" for k in updates)
+        """更新日报字段（sections 为 JSONB 需序列化）"""
+        serialized = {}
+        for k, v in updates.items():
+            if k == "sections" and isinstance(v, (dict, list)):
+                serialized[k] = json.dumps(v, ensure_ascii=False)
+            else:
+                serialized[k] = v
+        sets = ", ".join(f"{k} = :{k}" for k in serialized)
         stmt = f"UPDATE daily_reports SET {sets} WHERE id = :id"
-        updates["id"] = report_id
-        await self.session.execute(text(stmt), updates)
+        serialized["id"] = report_id
+        await self.session.execute(text(stmt), serialized)
         await self.session.commit()
 
     async def get_by_date(self, report_date: date) -> dict | None:

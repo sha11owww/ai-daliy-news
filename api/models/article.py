@@ -30,6 +30,7 @@ class DailyReport:
     """日报模型"""
     id: Optional[int] = None
     report_date: Optional[date] = None
+    session_type: str = "morning"
     title: str = ""
     article_order: list[int] = field(default_factory=list)
     sections: list[dict] = field(default_factory=list)

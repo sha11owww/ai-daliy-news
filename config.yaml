@@ -1,8 +1,13 @@
 app:
   name: "AI Daily"
   timezone: "Asia/Shanghai"
-  publish_hour: 7
-  publish_minute: 30
+  publish:
+    morning:
+      hour: 7
+      minute: 0
+    evening:
+      hour: 21
+      minute: 0
   log_level: "info"
   language: "zh-CN"
 
@@ -25,6 +30,8 @@ collector:
       enabled: true
       feed_urls:
         - "https://36kr.com/feed"
+        - "https://www.geekpark.net/rss"
+        - "https://www.producthunt.com/feed?category=artificial-intelligence"
     twitter:
       enabled: false
 

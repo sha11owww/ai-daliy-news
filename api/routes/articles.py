@@ -10,7 +10,7 @@ router = APIRouter(prefix="/api/articles", tags=["articles"])
 
 @router.get("/")
 async def list_articles(
-    report_date: str = Query(default=None, description="按日期筛选"),
+    report_date: str = Query(default=None, description="按日期筛选(YYYY-MM-DD)"),
     source: str = Query(default=None, description="按来源筛选"),
     section: str = Query(default=None, description="按栏目筛选"),
     limit: int = Query(default=50, le=100),
@@ -22,7 +22,7 @@ async def list_articles(
 
     if report_date:
         conditions.append("published_date = :date")
-        params["date"] = report_date
+        params["date"] = date.fromisoformat(report_date)
     if source:
         conditions.append("source = :source")
         params["source"] = source

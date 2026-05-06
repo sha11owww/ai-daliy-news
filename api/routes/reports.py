@@ -28,7 +28,7 @@ async def list_reports(
 @router.get("/today")
 async def get_today_report(db: AsyncSession = Depends(get_db)):
     """获取今日完整日报（含文章列表）"""
-    today = date.today().isoformat()
+    today = date.today()
     stmt = "SELECT * FROM daily_reports WHERE report_date = :today"
     result = await db.execute(text(stmt), {"today": today})
     row = result.fetchone()
@@ -54,8 +54,12 @@ async def get_today_report(db: AsyncSession = Depends(get_db)):
 @router.get("/{report_date}")
 async def get_report_by_date(report_date: str, db: AsyncSession = Depends(get_db)):
     """按日期获取指定日报"""
+    try:
+        parsed_date = date.fromisoformat(report_date)
+    except ValueError:
+        return {"error": "日期格式无效，请使用 YYYY-MM-DD"}, 400
     stmt = "SELECT * FROM daily_reports WHERE report_date = :date"
-    result = await db.execute(text(stmt), {"date": report_date})
+    result = await db.execute(text(stmt), {"date": parsed_date})
     row = result.fetchone()
     if not row:
         return {"error": "日报不存在"}, 404
