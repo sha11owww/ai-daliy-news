@@ -1,0 +1,15 @@
+name: classifier
+description: 分类文章：标签 + 重要度
+template: |
+  分析以下 AI 文章，返回 JSON：
+
+  {{
+    "tags": ["标签1", "标签2"],
+    "importance_score": 1-5,
+    "reason": "为什么重要"
+  }}
+
+  标题：{title}
+  内容：{content}
+
+  只返回合法的 JSON。
