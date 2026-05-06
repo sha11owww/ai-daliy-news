@@ -36,7 +36,7 @@ class ArticleRepository:
         rows = result.fetchall()
         return [dict(row._mapping) for row in rows]
 
-    async def update_article(self, article_id: int, updates: dict):
+    async def update_article(self, article_id: int, updates: dict) -> None:
         """更新文章字段"""
         sets = ", ".join(f"{k} = :{k}" for k in updates)
         stmt = f"UPDATE articles SET {sets} WHERE id = :id"

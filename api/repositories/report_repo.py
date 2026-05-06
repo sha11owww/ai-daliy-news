@@ -21,7 +21,7 @@ class ReportRepository:
         await self.session.commit()
         return result.scalar_one()
 
-    async def update(self, report_id: int, updates: dict):
+    async def update(self, report_id: int, updates: dict) -> None:
         """更新日报字段"""
         sets = ", ".join(f"{k} = :{k}" for k in updates)
         stmt = f"UPDATE daily_reports SET {sets} WHERE id = :id"
