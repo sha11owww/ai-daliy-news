@@ -5,284 +5,265 @@
   "total_articles": 15,
   "sections": [
     {
-      "name": "行业重磅",
-      "article_ids": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ]
-    },
-    {
       "name": "技术内核",
       "article_ids": [
         0,
-        0
-      ]
-    },
-    {
-      "name": "产品应用与工具",
-      "article_ids": [
         0,
         0,
         0,
         0,
         0,
-        0
-      ]
-    },
-    {
-      "name": "商业政策",
-      "article_ids": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         0
       ]
     }
   ],
-  "editor_notes": "自动生成于 2026-05-07 13:01:34.302783",
+  "editor_notes": "自动生成于 2026-05-07 06:09:58.558284",
   "status": "published",
-  "generated_at": "2026-05-07T13:01:35.634649",
+  "generated_at": "2026-05-07T06:09:58.825170",
   "articles": [
     {
-      "title": "氪星晚报｜三星电子借AI热潮市值突破1万亿美元；智源发布业内首个心脏磁共振多模态诊断智能体BAAI Cardiac Agent；财政部今年将在香港发行840亿元人民币国债",
-      "url": "https://36kr.com/p/3797482256325888?f=rss",
+      "title": "CreativityBench: Evaluating Agent Creative Reasoning via Affordance-Based Tool Repurposing",
+      "url": "https://arxiv.org/abs/2605.02910",
       "source": "rss",
-      "summary": "**摘要：**  \n本期氪星晚报聚焦科技与财经动态。三星电子借AI热潮市值突破1万亿美元，成为东亚第二家达此里程碑的企业。SpaceX提议在得州投资550亿美元建设半导体工厂Terafab，后续或增至1190亿美元。Anthropic承诺未来五年投入约2000亿美元采购谷歌云服务与芯片，占谷歌云合同储备收入40%以上。此外，智源发布业内首个心脏磁共振多模态诊断智能体BAAI Cardiac Agent，财政部今年将在香港发行840亿元人民币国债。美股光模块巨头Lumentum订单已排至2028年，营收同比增90%。",
-      "brief": "三星电子借AI热潮市值破万亿美元，智源发布心脏MRI诊断智能体，财政部将在港发行840亿国债。",
+      "summary": "一项新研究提出了CreativityBench基准，用于评估大语言模型的创造性工具使用能力。该基准基于一个包含4000个实体和超过15万条功能注释的知识库，生成了1.4万个需要模型通过推理物体属性而非常规用法来解决问题的任务。对10个前沿模型的测试显示，模型虽能选出可行物体，但在识别正确部件、其功能及物理机制方面表现不佳，导致性能显著下降。研究表明，模型规模扩展带来的提升很快饱和，通用推理能力无法可靠转化为创造性功能发现，链式思维等策略效果有限。这揭示了当前模型在创造性工具使用上的重大挑战，为未来智能体的规划与推理模块研究提供了重要测试平台。",
+      "brief": "CreativityBench通过工具属性推理评估AI创意，填补大模型创造性问题解决能力的空白。",
       "tags": [
-        "三星电子",
-        "AI热潮",
-        "市值突破",
-        "智源",
-        "心脏磁共振",
-        "多模态诊断",
-        "财政部",
-        "国债"
-      ],
-      "section": "行业重磅",
-      "importance_score": 5
-    },
-    {
-      "title": "8点1氪丨豆包新增付费订阅；抖音集团副总裁回应红果短剧付费；苹果因Siri人工智能功能推迟发布，以2.5亿美元和解诉讼",
-      "url": "https://36kr.com/p/3797041945304327?f=rss",
-      "source": "rss",
-      "summary": "### 摘要\n\n豆包在免费服务基础上，计划推出针对PPT生成、数据分析等复杂任务的付费订阅，相关方案仍在测试。抖音集团副总裁澄清，红果短剧并未强制收费，仅对少量影视内容设VIP权限，免费追剧模式不变。苹果因推迟Siri人工智能功能发布，以2.5亿美元和解股东诉讼。此外，分析师预测iPhone 18 Pro起步价8999元，定价策略激进；胖东来郑州店已注册成立，预计今年10月开业。",
-      "brief": "豆包探索付费订阅，抖音回应红果短剧付费，苹果推迟Siri功能并和解诉讼。",
-      "tags": [
-        "豆包",
-        "付费订阅",
-        "抖音",
-        "红果短剧",
-        "苹果",
-        "Siri",
-        "AI",
-        "诉讼"
-      ],
-      "section": "行业重磅",
-      "importance_score": 4
-    },
-    {
-      "title": "国家人工智能产业投资基金等入股云脉芯联",
-      "url": "https://36kr.com/newsflashes/3798730211433478?f=rss",
-      "source": "rss",
-      "summary": "国家人工智能产业投资基金等机构近日入股上海云脉芯联科技有限公司，公司注册资本由约267万元增至约378万元。云脉芯联成立于2021年，主营信息技术咨询与系统集成服务。此次融资显示国家级产业基金对AI基础设施领域的关注与支持。",
-      "brief": "国家人工智能产业投资基金等入股云脉芯联，注册资本增至约378万元。",
-      "tags": [
-        "AI芯片",
-        "融资",
-        "产业基金"
-      ],
-      "section": "商业政策",
-      "importance_score": 3
-    },
-    {
-      "title": "平头哥发布首款智能网卡「磐脉 920」，补齐 AI 算力最后一块短板",
-      "url": "http://www.geekpark.net/news/363777",
-      "source": "rss",
-      "summary": "平头哥发布首款智能网卡「磐脉 920」，这是国内首个内置PCIe Switch的400G智能网卡，最大支持400Gbps吞吐带宽，已量产并率先部署于阿里云数据中心。该产品旨在解决AI算力集群中因“网力”不足导致的GPU利用率低问题——当前行业万卡级智算集群的GPU实际利用率仅约60%。通过支持多路径RDMA等技术，磐脉920减少数据传输中的“堵”和“等”，提升集群协同效率，补齐AI算力短板。",
-      "brief": "平头哥发布首款智能网卡「磐脉920」，补齐AI算力短板，提升训练推理效率。",
-      "tags": [
-        "智能网卡",
-        "平头哥",
-        "AI算力",
-        "网力",
-        "磐脉920"
-      ],
-      "section": "产品应用与工具",
-      "importance_score": 4
-    },
-    {
-      "title": "Anthropic 搞了个全是 AI 的闲鱼群，大模型在里面互割起了韭菜",
-      "url": "http://www.geekpark.net/news/363718",
-      "source": "rss",
-      "summary": "Anthropic 近期完成了一项名为“Project Deal”的内部实验，让AI模型在无人类干预下模拟二手交易。实验中，69名员工为各自的Claude代理设定人设和谈判策略，AI代理在一周内自主完成了上百笔交易。数据显示，更强大的大模型能在谈判中从较弱模型处获得更优价格，而人类用户可能对此毫不知情。该实验揭示了AI在自主交易中可能存在的“智商压制”现象。",
-      "brief": "Anthropic创建了一个全是AI的闲鱼群，让大模型互相讨价还价，模拟“割韭菜”交易。",
-      "tags": [
-        "Anthropic",
-        "Claude",
-        "AI代理",
-        "二手交易",
-        "实验"
-      ],
-      "section": "产品应用与工具",
-      "importance_score": 3
-    },
-    {
-      "title": "AI 大模型的「中文税」：中文比英文更费 Token，为什么？",
-      "url": "http://www.geekpark.net/news/363717",
-      "source": "rss",
-      "summary": "近日，AI模型Claude新版Opus 4.7因token消耗激增引发用户不满，有用户反映200美元订阅不到两小时即触顶。虽然官方价格未变，但新tokenizer与默认effort提升导致同一任务token消耗增至2至2.7倍。值得注意的是，中文用户发现中文在新版中几乎未涨，甚至有说法称古文比现代汉语更省token。但Anthropic未提及中文相关调整，作者通过22段平行文本测试5个tokenizer，旨在探究中文是否真的存在“成本优势”及其背后的技术原因。",
-      "brief": "AI大模型处理中文比英文更耗Token，导致成本更高，引发用户抱怨。",
-      "tags": [
-        "中文税",
-        "Token",
-        "Tokenizer",
-        "成本",
-        "Claude"
-      ],
-      "section": "技术内核",
-      "importance_score": 3
-    },
-    {
-      "title": "张雪机车夺得 WSBK 第三冠；传苹果正在酝酿一笔大型 AI 收购；创始人加入后，OpenAI 宣布开放 OpenClaw 直连｜极客早知道",
-      "url": "http://www.geekpark.net/news/363698",
-      "source": "rss",
-      "summary": "张雪机车在2026年WSBK匈牙利站WorldSSP组别夺冠，车手德比斯获第三冠，车队在制造商积分榜排名第三。特斯拉CEO马斯克2025年薪酬被曝为1583亿美元会计估值，实际未获任何现金，因未达成业绩目标。OpenAI宣布ChatGPT账号可直接登录OpenClaw使用订阅服务，奥特曼称“祝您捕虾愉快”。",
-      "brief": "张雪机车夺WSBK第三冠；传苹果酝酿大型AI收购；OpenAI宣布开放OpenClaw直连。",
-      "tags": [
-        "WSBK",
-        "张雪机车",
-        "马斯克薪酬",
-        "OpenClaw",
-        "ChatGPT"
-      ],
-      "section": "行业重磅",
-      "importance_score": 4
-    },
-    {
-      "title": "DeepSeek 发布多模态模型及技术报告；小红书官宣组织调整：柯南出任总裁；宇树发布双臂人形机器人，2.69万元起售",
-      "url": "http://www.geekpark.net/news/363694",
-      "source": "rss",
-      "summary": "**摘要：**  \nDeepSeek发布多模态模型及技术报告，提出“基于视觉原语的思考”框架，将空间标记作为推理单元，解决自然语言在复杂空间任务中的模糊性。该模型在计数和空间推理基准上媲美GPT-5.4等前沿模型，但规模更小、效率更高。同时，小红书官宣组织调整，柯南出任总裁；宇树发布双臂人形机器人，起售价2.69万元。",
-      "brief": "DeepSeek发布多模态模型，小红书任命柯南为总裁，宇树推出2.69万元起双臂人形机器人。",
-      "tags": [
-        "DeepSeek",
-        "多模态模型",
-        "技术报告",
-        "视觉原语推理"
+        "LLM",
+        "创造力评估",
+        "工具使用",
+        "基准测试",
+        "知识库"
       ],
       "section": "技术内核",
       "importance_score": 4
     },
     {
-      "title": "对话奔驰高管：AI 上车之后，豪华品牌如何重新定义智能化？",
-      "url": "http://www.geekpark.net/news/363649",
+      "title": "Stable Agentic Control: Tool-Mediated LLM Architecture for Autonomous Cyber Defense",
+      "url": "https://arxiv.org/abs/2605.03034",
       "source": "rss",
-      "summary": "在北京车展上，梅赛德斯-奔驰展示了其在智能化领域的最新进展。全新纯电CLA已支持城区及高速辅助驾驶全国可用，年内力争实现“车位到车位”功能。座舱方面，中国团队主导研发的后排娱乐系统部署了VLM大模型，提供更自然的交互体验。奔驰强调“从容不迫”的智能化理念，即技术主动且不打扰地服务用户。值得注意的是，奔驰公开承认其智驾合作伙伴Momenta及座舱伙伴字节、高德等，在强调“自研”的车圈中显得独特。这一系列举措表明，豪华品牌正通过开放合作与本土化研发，重新定义智能化体验。",
-      "brief": "奔驰高管称，AI赋能后，豪华品牌正通过高阶智驾与VLM大模型重新定义智能化。",
+      "summary": "这篇论文提出了一种工具中介的LLM架构，用于在对抗压力下实现自主网络防御。该架构通过确定性工具（如Stackelberg最优响应、贝叶斯观测更新）和有限动作目录，确保系统稳定性。研究使用Lean 4验证了复合Lyapunov函数，证明了可控性、可观测性和输入-状态稳定性（ISS）鲁棒性。在282个真实企业攻击图上，所有声明均成立。实验显示，Claude Sonnet 4控制器将攻击者的预期收益降低了59%，且40次运行中方差为零。该架构不依赖控制器能力，即使较弱模型也能保持系统稳定。其重要性在于为高风险决策提供了形式化安全保障。",
+      "brief": "新论文提出工具介导的LLM架构，用于在对抗压力下实现自主网络防御的稳定代理控制。",
       "tags": [
-        "奔驰",
-        "AI上车",
-        "智能化",
-        "豪华品牌",
-        "VLM大模型"
+        "AI安全",
+        "自主防御",
+        "LLM架构",
+        "工具中介",
+        "形式化验证"
       ],
-      "section": "产品应用与工具",
+      "section": "技术内核",
+      "importance_score": 4
+    },
+    {
+      "title": "Programmatic Context Augmentation for LLM-based Symbolic Regression",
+      "url": "https://arxiv.org/abs/2605.03101",
+      "source": "rss",
+      "summary": "一项新研究提出了一种基于大语言模型（LLM）的符号回归（SR）进化搜索框架，通过引入程序化上下文增强来解决传统方法依赖单一标量评估指标（如均方误差）而忽略数据集丰富信息的问题。该方法允许模型主动进行代码级数据分析并提取有效信号。在LLM-SRBench等高级基准测试中，该框架相比强基线方法展现出更高的效率和准确性。这项研究对提升科学发现中数学表达式自动搜索的性能具有重要意义。",
+      "brief": "LLM结合程序化上下文增强，改进符号回归的演化搜索，提升可扩展性与表现力。",
+      "tags": [
+        "符号回归",
+        "LLM",
+        "进化搜索",
+        "程序上下文增强"
+      ],
+      "section": "技术内核",
       "importance_score": 3
     },
     {
-      "title": "马斯克：OpenAI 是我的创意，Altman 是小偷；Claude Code 使用成本翻倍；Image 2 登顶视觉模型榜｜极客早知道",
-      "url": "http://www.geekpark.net/news/363594",
+      "title": "Terminus-4B: Can a Smaller Model Replace Frontier LLMs at Agentic Execution Tasks?",
+      "url": "https://arxiv.org/abs/2605.03195",
       "source": "rss",
-      "summary": "**摘要：**  \nOpenAI 结束与微软的独家云合作，其最新模型（如 GPT-5.5）将接入亚马逊 AWS 的 Bedrock 平台，企业可沿用现有接口调用。同时，OpenAI 预计今年 ChatGPT 订阅用户达 1.22 亿，其中约 1.12 亿将转向每月 8 美元的“ChatGPT Go”低价套餐，标志其向大众化转型。苹果计划在 iOS 27 中利用 AI 升级照片编辑功能，支持设备端快速处理。此外，OpenAI 的 GPT Image 2 模型超越谷歌 Nano Banana2，登顶全球文生图模型榜首，尤其在汉字生成领域取得 93.07 高分，解决了文字“漂浮感”等技术难题。",
-      "brief": "OpenAI结束与微软独家合作，接入亚马逊AWS；马斯克指责Altman；Claude Code成本翻倍；Image 2登顶视觉模型榜。",
+      "summary": "现代编码智能体常将搜索、调试等子任务委托给小型子智能体执行，以保持主智能体上下文窗口的整洁。最新研究《Terminus-4B》探讨了微调小语言模型（SLM）能否在此类终端执行任务中替代前沿模型。研究者基于Qwen3-4B模型，通过监督微调和强化学习训练出Terminus-4B。实验表明，该模型在SWE-Bench Pro等基准测试中，能将主智能体的token使用量减少约30%，且不影响性能。相比原始Qwen模型，Terminus-4B不仅缩小了与Claude Sonnet、GPT-4o等前沿模型的差距，甚至在某些指标上超越它们。这一发现表明，针对特定任务优化的小模型，有望在降低计算成本的同时，高效替代大型前沿模型。",
+      "brief": "Terminus-4B研究显示，小型模型可替代前沿大模型执行代理任务，通过子代理隔离冗余输出。",
       "tags": [
-        "OpenAI",
-        "AWS",
-        "GPT Image 2",
-        "苹果",
-        "AI订阅"
-      ],
-      "section": "行业重磅",
-      "importance_score": 5
-    },
-    {
-      "title": "OpenAI 硬件负责人的闭门分享，向我们揭示了为什么硬件「终点」仍是智能手机",
-      "url": "http://www.geekpark.net/news/363596",
-      "source": "rss",
-      "summary": "OpenAI硬件负责人近日在一次闭门分享中指出，智能手机仍是AI硬件的“终点”形态。他强调，硬件设计必须为未来模型的发展方向做准备，而非仅适配当前技术。这一观点揭示了AI硬件演进的核心逻辑：在算力、便携性和用户交互之间寻求平衡，而智能手机作为最成熟的移动计算平台，仍是最优载体。该分享为理解AI硬件趋势提供了关键视角。",
-      "brief": "OpenAI硬件负责人指出，尽管技术演进，智能手机仍是AI硬件发展的最终形态。",
-      "tags": [
-        "OpenAI",
-        "硬件",
-        "智能手机",
-        "AI硬件"
-      ],
-      "section": "产品应用与工具",
-      "importance_score": 3
-    },
-    {
-      "title": "汽车的「OpenClaw 时刻」，到了？",
-      "url": "http://www.geekpark.net/news/363403",
-      "source": "rss",
-      "summary": "2026年北京车展上，几乎所有车企都宣称搭载大模型AI助手，但实际体验仍停留在“更智能的语音聊天”阶段，真正能主动控车的Agent尚未量产。火山引擎、腾讯、科大讯飞等厂商纷纷推出方案，但多数合作仅是替换语音引擎，未能实现从“问答”到“感知-推理-执行”的闭环。这一断层揭示了当前汽车AI的核心问题：人人谈论Agent，但90%仍是Chatbot，真正的智能控车还需解决工程复杂度。",
-      "brief": "2026北京车展上，车企纷纷搭载大模型，AI助手与控车功能成标配，迎来“OpenClaw时刻”。",
-      "tags": [
-        "AI座舱",
-        "智能汽车",
+        "小模型",
         "Agent",
-        "大模型",
-        "车展"
+        "终端执行",
+        "SWE-Bench",
+        "Qwen3-4B"
       ],
-      "section": "产品应用与工具",
+      "section": "技术内核",
       "importance_score": 4
     },
     {
-      "title": "DeepSeek 正式发布 V4 API：Flash/Pro 双版本齐发，百万上下文成标配",
-      "url": "http://www.geekpark.net/news/363222",
+      "title": "ADAPTS: Agentic Decomposition for Automated Protocol-agnostic Tracking of Symptoms",
+      "url": "https://arxiv.org/abs/2605.03212",
       "source": "rss",
-      "summary": "DeepSeek 正式发布 V4 预览版 API，推出 V4-Pro 和 V4-Flash 两个版本，全系标配百万字超长上下文，并同步开源模型权重和技术报告。此举将此前仅见于高端闭源模型的长文本能力下放为“基础标配”，大幅降低行业获取门槛。同期，腾讯混元 Hy3 预览版与 OpenAI 面向付费用户上线的新模型也相继发布，三者均聚焦 Agent 能力、超长上下文和代码工具调用，推动模型向更复杂的工作流程嵌入。",
-      "brief": "DeepSeek发布V4 API，Pro和Flash双版本均支持百万上下文，并开源模型权重。",
+      "summary": "ADAPTS框架利用混合大语言模型架构，将临床访谈分解为症状推理任务，实现抑郁和焦虑严重程度的自动化评分。在两项独立数据集（共204人）测试中，针对高差异访谈，其自动化评分绝对误差（22）优于原始人工评分（26）。采用扩展协议后，评分一致性达ICC(2,1)=0.877。该框架为资源有限环境下的客观、可扩展精神评估提供了基础。",
+      "brief": "ADAPTS框架利用混合智能体LLM架构，将临床访谈分解为症状推理任务，自动评估抑郁和焦虑严重程度。",
       "tags": [
-        "DeepSeek V4",
-        "API发布",
-        "百万上下文",
-        "开源模型"
+        "ADAPTS",
+        "Agentic Decomposition",
+        "LLM",
+        "心理健康评估",
+        "抑郁焦虑",
+        "临床访谈"
       ],
-      "section": "产品应用与工具",
+      "section": "技术内核",
+      "importance_score": 3
+    },
+    {
+      "title": "Evaluating Prompting and Execution-Based Methods for Deterministic Computation in LLMs",
+      "url": "https://arxiv.org/abs/2605.03227",
+      "source": "rss",
+      "summary": "一项新研究系统评估了多种提示策略（如思维链、最少到最多分解、程序化思维和自一致性）在需要精确计算的确定性任务（如二进制计数、最长子串检测和算术评估）中的表现。结果显示，标准提示方法在序列任务上准确率中等，思维链改进有限，而程序化思维通过生成代码并交由外部解释器执行实现了完美准确率。自一致性通过多数投票提升鲁棒性但计算开销大。研究还训练了小型专用模型CodeT5-small，在测试数据上以极低训练成本达到完美准确率。该研究重要性在于揭示了大语言模型可能模拟推理而非可靠执行精确符号计算，结合外部工具或专用模型是更可靠高效的解决方案。",
+      "brief": "研究评估了多种提示策略（如CoT、PoT）在LLM确定性计算任务中的表现，发现其精确性仍存疑。",
+      "tags": [
+        "LLM",
+        "确定性计算",
+        "提示策略",
+        "外部工具",
+        "CodeT5"
+      ],
+      "section": "技术内核",
+      "importance_score": 3
+    },
+    {
+      "title": "Enhancing Agent Safety Judgment: Controlled Benchmark Rewriting and Analogical Reasoning for Deceptive Out-of-Distribution Scenarios",
+      "url": "https://arxiv.org/abs/2605.03242",
+      "source": "rss",
+      "summary": "大型语言模型驱动的工具使用智能体在各类环境中部署增多，但现有安全基准多聚焦于显性风险，可能高估模型对欺骗性轨迹的判断能力。为此，研究者提出ROME（红队编排多智能体演化）基准构建流程，将100条已知不安全轨迹重写为300个更具欺骗性的评估实例，涵盖上下文模糊、隐性风险和捷径决策等场景。实验表明，这些挑战实例显著降低了智能体的安全判断性能，尤其隐性风险案例对前沿模型仍具难度。同时，研究提出ARISE（推理时安全增强的类比推理）方法，通过检索类比安全轨迹作为结构化推理示例来提升判断质量，无需重新训练。ROME与ARISE为在欺骗性分布偏移下压力测试和提升智能体安全判断提供了实用工具。",
+      "brief": "新研究提出ROME方法，通过可控基准改写与类比推理，提升AI代理在欺骗性场景中的安全判断能力。",
+      "tags": [
+        "AI安全",
+        "Agent",
+        "基准测试",
+        "推理增强",
+        "大语言模型"
+      ],
+      "section": "技术内核",
       "importance_score": 4
     },
     {
-      "title": "大模型上车两年，为什么「真·AI 汽车」现在才出现？",
-      "url": "http://www.geekpark.net/news/363204",
+      "title": "Revisiting the Travel Planning Capabilities of Large Language Models",
+      "url": "https://arxiv.org/abs/2605.03308",
       "source": "rss",
-      "summary": "极氪8X在北京车展上展示了一项新功能：用户只需说“带我去接孩子放学，顺便找一家麦当劳，5点前到学校”，车辆即可自主规划路线、启动智驾、中途停靠并自动泊车，全程无需手动操作。这背后并非简单的语音助手，而是一套从“大脑”到“四肢”打通的整车智能体系统。文章指出，过去两年大模型虽已“上车”，但多为座舱内的对话机器人，与智驾系统割裂。真正的AI汽车需要从底层重构架构，实现感知、决策与交互的统一。阶跃星辰与千里科技近期宣布合作，共建“原生智驾基座模型”，采用从底层融合而非API接入的方式，被视为解决这一问题的关键路径。",
-      "brief": "极氪8X展示整车智能体系统，实现语音指令全自动规划路线、智驾与泊车，标志真正AI汽车出现。",
+      "summary": "一项新研究将旅行规划任务分解为五个原子子能力（约束提取、工具使用、计划生成、错误识别与错误修正），并采用解耦评估协议，以隔离各环节的独立表现。结果显示，大语言模型在提取显性约束方面表现良好，但在推断隐含的开放世界需求、克服计划生成中的结构性偏差以及有效自我修正方面存在明显不足。该研究为提升LLM的推理与规划能力提供了精确的改进方向。",
+      "brief": "新研究将旅行规划分解为五项原子能力，以分析大语言模型在长程推理中的缺陷。",
       "tags": [
-        "AI汽车",
-        "大模型上车",
-        "阶跃星辰",
-        "千里科技",
-        "原生智驾基座模型"
+        "LLM",
+        "旅行规划",
+        "推理能力",
+        "基准测试"
       ],
-      "section": "行业重磅",
+      "section": "技术内核",
+      "importance_score": 3
+    },
+    {
+      "title": "Automated Large-scale CVRP Solver Design via LLM-assisted Flexible MCTS",
+      "url": "https://arxiv.org/abs/2605.03339",
+      "source": "rss",
+      "summary": "一项新研究提出名为LaF-MCTS的框架，利用大语言模型（LLM）辅助的灵活蒙特卡洛树搜索，自动设计大规模容量车辆路径问题（CVRP）的求解器。该框架通过三层决策层次结构，逐步设计分解策略与子求解器，并引入语义剪枝与分支再生技术，提升搜索效率。实验表明，LaF-MCTS能自主组合并优化求解器，在CVRPLib基准上超越多种现有最优求解器。其重要性在于，它降低了人工设计分解逻辑与配置子求解器的高昂成本，为自动化求解大规模组合优化问题提供了新路径。",
+      "brief": "新研究用LLM辅助灵活MCTS自动设计大规模CVRP求解器，降低人工设计成本。",
+      "tags": [
+        "LLM",
+        "MCTS",
+        "CVRP",
+        "算法设计",
+        "自动化"
+      ],
+      "section": "技术内核",
       "importance_score": 4
     },
     {
-      "title": "GPT-5.5 来了，但这次 OpenAI 想证明的不只是「更聪明」",
-      "url": "http://www.geekpark.net/news/363131",
+      "title": "What Happens Inside Agent Memory? Circuit Analysis from Emergence to Diagnosis",
+      "url": "https://arxiv.org/abs/2605.03354",
       "source": "rss",
-      "summary": "**摘要：**  \nOpenAI 于今日向付费用户推送 GPT-5.5 模型，距离上一代 GPT-5.4 发布仅六周。此次迭代并非单纯提升智能水平，而是试图打破“模型越聪明越慢、越贵”的行业惯例。OpenAI 宣称，GPT-5.5 在保持与 GPT-5.4 相同推理延迟的同时，实现了智能水平的“大幅跃升”。第三方测试显示，GPT-5.5 在 14 个基准测试中达到最先进水平，远超 Anthropic Claude Opus 4.7（4 个）和 Google Gemini 3.1 Pro（2 个）。其强项集中在代码编写与调试、在线研究、数据分析、文档处理及软件操作等代理式任务。这一进展意味着用户无需在速度与能力之间取舍，可能重塑 AI 模型的服务标准。",
-      "brief": "OpenAI 发布 GPT-5.5，定位“全新智能等级”，距上一代仅六周，迭代速度惊人。",
+      "summary": "一项针对Qwen-3系列模型（0.6B至14B参数）及两种记忆框架（mem0和A-MEM）的电路分析研究揭示了智能体记忆故障的内部机制。研究发现：控制电路在0.6B参数时已可检测，但内容电路直到4B参数才出现信号，导致小模型看似能路由却无法提取信息；写入与读取共享一个基础模型中已存在的上下文接地枢纽，该枢纽可跨框架迁移；内容电路在4B参数时出现，但直到8B参数才具备可操控性。该研究实现了无需监督即可定位操作级故障（准确率76.2%），为诊断智能体记忆的静默故障提供了新方法。",
+      "brief": "一项研究通过电路分析揭示了LLM代理在记忆写入、管理和读取阶段的内部计算机制及其故障模式。",
       "tags": [
-        "GPT-5.5",
-        "OpenAI",
-        "模型迭代",
-        "智能跃升"
+        "Agent Memory",
+        "Circuit Analysis",
+        "Qwen-3",
+        "LLM",
+        "Emergence"
       ],
-      "section": "行业重磅",
-      "importance_score": 5
+      "section": "技术内核",
+      "importance_score": 4
+    },
+    {
+      "title": "ReasonAudio: A Benchmark for Evaluating Reasoning Beyond Matching in Text-Audio Retrieval",
+      "url": "https://arxiv.org/abs/2605.03361",
+      "source": "rss",
+      "summary": "ReasonAudio 是一个新推出的文本-音频检索基准测试，包含1,000个查询和10,000个复合音频片段，专门评估模型在否定理解、时间顺序、并发事件识别和时长判断等高级推理任务上的表现。测试发现，当前十种最先进的模型在推理密集型检索中普遍表现不佳，尤其在否定和时长任务上最差，而在重叠和顺序任务上相对较好。此外，基于多模态大语言模型的嵌入模型在对比微调后未能保留其推理能力。该研究揭示了现有检索模型在复杂推理方面的显著短板，对推动更智能的音频检索系统发展具有重要意义。",
+      "brief": "ReasonAudio 基准发布，用于评估文本-音频检索中的高级推理能力，如否定、时序和并发事件识别。",
+      "tags": [
+        "音频检索",
+        "推理基准",
+        "ReasonAudio",
+        "多模态"
+      ],
+      "section": "技术内核",
+      "importance_score": 3
+    },
+    {
+      "title": "Workspace-Bench 1.0: Benchmarking AI Agents on Workspace Tasks with Large-Scale File Dependencies",
+      "url": "https://arxiv.org/abs/2605.03596",
+      "source": "rss",
+      "summary": "一项名为Workspace-Bench 1.0的新基准测试被提出，用于评估AI代理在工作区学习任务中的表现。该基准构建了包含5种职业档案、74种文件类型、20476个文件（总计20GB）的真实工作区，并设计了388个任务，每个任务均包含文件依赖关系图，通过7399条评估标准进行测试。实验结果显示，当前最佳AI代理的得分仅为68.7%，远低于人类的80.7%，平均得分更是只有47.4%。该研究揭示了现有AI在处理大规模文件依赖、跨文件检索和上下文推理等复杂工作区任务时仍不可靠，对推动AI在真实工作场景中的应用具有重要意义。",
+      "brief": "新基准Workspace-Bench 1.0评估AI代理处理大规模文件依赖的工作空间任务能力。",
+      "tags": [
+        "AI Agent",
+        "Benchmark",
+        "Workspace Learning",
+        "File Dependencies"
+      ],
+      "section": "技术内核",
+      "importance_score": 4
+    },
+    {
+      "title": "AdapShot: Adaptive Many-Shot In-Context Learning with Semantic-Aware KV Cache Reuse",
+      "url": "https://arxiv.org/abs/2605.03644",
+      "source": "rss",
+      "summary": "AdapShot是一种针对大语言模型（LLM）的“自适应多示例上下文学习”方法。传统方法使用固定数量的示例，难以适应不同查询的难度，且长上下文计算成本高。AdapShot通过基于输出熵的探测机制动态调整示例数量，并引入语义感知的KV缓存重用策略，避免重复计算，同时通过解耦与重编码解决位置编码不兼容问题。实验表明，相比现有最优方法DBSA，AdapShot平均性能提升约10%，推理速度提升4.64倍。该研究提升了LLM在复杂任务中的效率与适应性。",
+      "brief": "AdapShot提出自适应多示例上下文学习，通过语义感知KV缓存复用，动态调整示例数量以提升效率。",
+      "tags": [
+        "Many-Shot ICL",
+        "KV Cache Reuse",
+        "AdapShot",
+        "LLM推理优化"
+      ],
+      "section": "技术内核",
+      "importance_score": 3
+    },
+    {
+      "title": "OracleProto: A Reproducible Framework for Benchmarking LLM Native Forecasting via Knowledge Cutoff and Temporal Masking",
+      "url": "https://arxiv.org/abs/2605.03762",
+      "source": "rss",
+      "summary": "**摘要：**  \n大型语言模型（LLM）正从文本生成转向决策支持，但评估其预测能力面临难题：实时基准测试虽准确但会过期，回顾性测试则无法区分真实预测与模型已学知识。为此，研究者提出 **OracleProto** 框架，通过模型知识截止对齐、时间掩码、内容泄漏检测等方法，将已发生事件重构为有时间边界的预测样本。在基于 FutureX-Past 数据集、使用六种当代 LLM 的测试中，OracleProto 将残留泄漏降至 **1%** 水平（比仅用时间过滤低一个数量级），并有效区分了预测质量、采样稳定性与成本效率。该框架使 LLM 预测评估变为可审计、可复用、可训练的数据集级能力，为跨模型公平比较和下游强化学习/微调提供统一接口。",
+      "brief": "OracleProto提出可复现框架，通过知识截止与时间掩码评估LLM原生预测能力。",
+      "tags": [
+        "LLM",
+        "预测",
+        "基准测试",
+        "时间掩码",
+        "可复现"
+      ],
+      "section": "技术内核",
+      "importance_score": 4
+    },
+    {
+      "title": "Say the Mission, Execute the Swarm: Agent-Enhanced LLM Reasoning in the Web-of-Drones",
+      "url": "https://arxiv.org/abs/2605.03788",
+      "source": "rss",
+      "summary": "一项新研究提出了一种基于大语言模型（LLM）的无人机集群控制框架，用户可用自然语言下达任务，系统通过智能体核心和W3C物联网标准实现自主执行。该框架在ArduPilot模拟环境中测试了四种集群任务和六种先进LLM，结果显示：尽管当前通用LLM具备强大推理能力，但在缺乏明确接地与执行支持时，即使简单集群任务也难以可靠完成。研究表明，任务专用规划工具和运行时防护栏能显著提升执行鲁棒性，而仅凭令牌消耗量无法衡量执行质量。该工作为LLM在实时无人机集群管理中的实际应用提供了重要参考。",
+      "brief": "新研究提出智能体增强LLM框架，让用户用自然语言指挥无人机群执行任务。",
+      "tags": [
+        "LLM",
+        "UAV swarm",
+        "agent",
+        "reasoning",
+        "Web-of-Drones"
+      ],
+      "section": "技术内核",
+      "importance_score": 3
     }
   ]
 }
