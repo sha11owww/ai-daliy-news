@@ -4,9 +4,13 @@
 import asyncio
 import json
 import os
+import sys
 import argparse
 from datetime import datetime, date
 from pathlib import Path
+
+# 将项目根目录加入 Python 路径
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 从环境变量读取
 API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
