@@ -1,8 +1,12 @@
 @echo off
 title AI Daily
 
+echo [sync] Pulling latest data from GitHub...
+cd /d "%~dp0"
+git pull origin main >nul 2>&1
+
 echo [1/3] Starting API...
-start "API" /B uvicorn api.main:app --reload --port 8000 > api.log 2>&1
+start "API" /B uvicorn api.main:app --reload --port 8001 > api.log 2>&1
 timeout /t 4 >nul
 
 echo [2/3] Starting Frontend...
@@ -17,11 +21,7 @@ start http://localhost:5173
 echo.
 echo ===== AI Daily =====
 echo Frontend : http://localhost:5173
-echo API      : http://localhost:8000
-echo.
-echo Tips:
-echo - 今日无数据是正常的，等 7:00 早报生成
-echo - 点击左边日历可看 5月6日 历史数据
+echo API      : http://localhost:8001
 echo ====================
 echo.
 pause
