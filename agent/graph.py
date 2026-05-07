@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
 
 from agent.state import DailyReportState, ArticleState
-from agent.tools import scan_sources, fetch_content, write_summary, classify, save_report
+from agent.tools import scan_sources, fetch_content, write_summary, classify, save_report, select_articles
 from agent.reflection import critique_summary
 
 load_dotenv()
@@ -21,22 +21,13 @@ async def collect_node(state: DailyReportState) -> dict:
 
 
 async def select_node(state: DailyReportState) -> dict:
+    """节点 2：LLM 自主选文"""
     articles = state.get("raw_articles", [])
     if not articles:
         return {"selected_article_ids": [], "status": "empty"}
-
     session_type = state.get("session_type", "morning")
-    scored = [(0, i, a) for i, a in enumerate(articles)]
-
-    # 早报前15，晚报后15（互补）
-    total = len(scored)
-    if session_type == "evening":
-        selected = scored[15:30]
-    else:
-        selected = scored[:15]
-    selected = selected or scored[:15]
-    ids = [s[2] for s in selected]
-    return {"selected_article_ids": ids, "raw_articles": [a for _, _, a in selected]}
+    selected = await select_articles(articles, session_type)
+    return {"selected_article_ids": [id(a) for a in selected], "raw_articles": selected}
 
 
 async def fetch_node(state: DailyReportState) -> dict:
@@ -100,19 +91,16 @@ async def layout_node(state: DailyReportState) -> dict:
     st = state.get("session_type", "morning")
     prefix = "AI早报" if st == "morning" else "AI晚报"
     title_str = f"{prefix} · {today.strftime('%Y年%m月%d日')}"
-
     sorted_arts = sorted(arts, key=lambda a: -a["importance_score"])
     sec_arts = {s: [] for s in FIXED_SECTIONS}
     for a in sorted_arts:
         s = a.get("section") or "行业重磅"
         sec_arts[s if s in sec_arts else "行业重磅"].append(a)
-
     sections, article_ids = [], []
     for sec in FIXED_SECTIONS:
         if sec_arts[sec]:
             sections.append({"name": sec, "article_ids": [a.get("id", 0) for a in sec_arts[sec]]})
             article_ids.extend(a.get("id", 0) for a in sec_arts[sec])
-
     return {"sections": sections, "article_order": article_ids, "title": title_str,
             "status": "published", "editor_notes": f"自动生成于 {datetime.now()}", "total_articles": len(arts)}
 
