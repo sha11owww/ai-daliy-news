@@ -1,0 +1,48 @@
+app:
+  name: "AI Daily"
+  timezone: "Asia/Shanghai"
+  publish:
+    morning:
+      hour: 7
+      minute: 0
+    evening:
+      hour: 21
+      minute: 0
+  log_level: "info"
+  language: "zh-CN"
+
+collector:
+  interval_hours: 24
+  max_articles_per_source: 30
+  timeout: 30
+  sources:
+    linuxdo:
+      enabled: false
+    reddit:
+      enabled: false
+    rss:
+      enabled: true
+      feed_urls:
+        - "http://export.arxiv.org/rss/cs.AI"
+        - "https://blog.google/technology/ai/rss"
+        - "https://www.producthunt.com/feed?category=artificial-intelligence"
+    twitter:
+      enabled: false
+
+agent:
+  model: "deepseek-v4-flash"
+  temperature: 0.3
+  max_tokens: 1024
+  timeout: 60
+  max_retries: 2
+  reflection_enabled: true
+  daily_report:
+    max_headlines: 3
+    max_briefs: 12
+    summary_max_length: 200
+    brief_max_length: 50
+    language: "zh-CN"
+
+database:
+  pool_size: 5
+  max_overflow: 10

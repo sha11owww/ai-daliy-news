@@ -40,7 +40,9 @@ jobs:
         run: |
           pip install --upgrade pip -q
           pip install -r requirements.txt -q
-          playwright install chromium --with-deps -q 2>&1 | tail -3
+
+      - name: 使用国际源配置
+        run: cp config.actions.yaml config.yaml
 
       - name: 判断日报时段（根据触发时间）
         id: session
