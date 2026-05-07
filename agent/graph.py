@@ -8,6 +8,7 @@ from langgraph.checkpoint.memory import MemorySaver
 
 from agent.state import DailyReportState, ArticleState
 from agent.tools import scan_sources, fetch_content, write_summary, classify, save_report, select_articles
+from agent.tools.saver import _load_seen_urls
 from agent.reflection import critique_summary
 
 load_dotenv()
@@ -21,12 +22,22 @@ async def collect_node(state: DailyReportState) -> dict:
 
 
 async def select_node(state: DailyReportState) -> dict:
-    """节点 2：LLM 自主选文"""
+    """节点 2：先过滤已见文章，再 LLM 选文"""
     articles = state.get("raw_articles", [])
     if not articles:
         return {"selected_article_ids": [], "status": "empty"}
+
+    seen = _load_seen_urls()
+    fresh = [a for a in articles if a.get("url") not in seen]
+    skipped = len(articles) - len(fresh)
+    if skipped:
+        print(f"[select] 去重: 跳过 {skipped} 篇, 剩余 {len(fresh)} 篇新候选")
+
     session_type = state.get("session_type", "morning")
-    selected = await select_articles(articles, session_type)
+    selected = await select_articles(fresh, session_type)
+    if not selected:
+        print("[select] LLM 未选中任何文章，取前 15 篇兜底")
+        selected = fresh[:15]
     return {"selected_article_ids": [id(a) for a in selected], "raw_articles": selected}
 
 
