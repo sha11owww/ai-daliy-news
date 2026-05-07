@@ -1,3 +1,4 @@
+import os
 import yaml
 from collector.base import RawArticle
 from collector.scrapers import SCRAPERS
@@ -6,7 +7,9 @@ from collector.scrapers import SCRAPERS
 class CollectorPipeline:
     """采集管道：遍历所有启用的数据源并执行采集"""
 
-    def __init__(self, config_path: str = "config.yaml"):
+    def __init__(self, config_path: str = None):
+        if config_path is None:
+            config_path = os.getenv("CONFIG_PATH", "config.yaml")
         with open(config_path, "r") as f:
             self.config = yaml.safe_load(f)
         self.max_per_source = self.config["collector"]["max_articles_per_source"]
