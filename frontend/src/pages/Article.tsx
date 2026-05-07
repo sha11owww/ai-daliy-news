@@ -15,27 +15,19 @@ export default function Article() {
     async function load() {
       const urlParam = searchParams.get('url');
 
-      // 方式1：通过数据库 ID 加载
+      // 方式1：数据库 ID 查询
       if (id && !urlParam) {
         const data = await fetchArticle(Number(id));
         if (data) { setArticle(data); setLoading(false); return; }
       }
 
-      // 方式2：通过 URL 从当天及历史日报 JSON 中查找
+      // 方式2：通过 URL 从 JSON 文件查找
       if (urlParam) {
         try {
-          const res = await fetch(`${API_BASE}/reports/`);
-          const reports = await res.json();
-          // 遍历近 7 天日报
-          for (const r of reports.slice(0, 14)) {
-            const detailRes = await fetch(`${API_BASE}/reports/${r.report_date}`);
-            const dayReports = await detailRes.json();
-            const list = Array.isArray(dayReports) ? dayReports : [dayReports];
-            for (const day of list) {
-              for (const a of (day.articles || [])) {
-                if (a.url === urlParam) { setArticle(a); setLoading(false); return; }
-              }
-            }
+          const res = await fetch(`${API_BASE}/articles/by-url?url=${encodeURIComponent(urlParam)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && !data.error) { setArticle(data); setLoading(false); return; }
           }
         } catch {}
       }
@@ -73,20 +65,12 @@ export default function Article() {
           </span>
         )}
 
-        <h1 className="text-2xl font-bold text-ink-dark leading-snug mb-4">
-          {article.title}
-        </h1>
+        <h1 className="text-2xl font-bold text-ink-dark leading-snug mb-4">{article.title}</h1>
 
         <div className="flex items-center gap-4 text-sm text-ink-light mb-8">
           <span>📰 {article.source}</span>
-          <a
-            href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-ink underline hover:text-ink-dark ml-auto"
-          >
-            🔗 查看原文
-          </a>
+          <a href={article.url} target="_blank" rel="noopener noreferrer"
+             className="text-ink underline hover:text-ink-dark ml-auto">🔗 查看原文</a>
         </div>
 
         {article.summary && (
@@ -98,12 +82,7 @@ export default function Article() {
         {article.tags.length > 0 && (
           <div className="mt-8 pt-6 border-t border-border flex gap-2 flex-wrap">
             {article.tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-sm px-3 py-1 bg-card rounded-full text-ink"
-              >
-                {tag}
-              </span>
+              <span key={tag} className="text-sm px-3 py-1 bg-card rounded-full text-ink">{tag}</span>
             ))}
           </div>
         )}
