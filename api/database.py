@@ -27,35 +27,10 @@ async def init_db():
 async def run_migrations():
     """执行 schema.sql 建表语句
 
-    逐条执行 SQL 语句，正确处理 PL/pgSQL 函数定义中的美元引号。
+    先迁移旧表结构，再执行完整 schema，避免索引在缺失列上创建失败。
     """
-    dir_path = os.path.join(os.path.dirname(__file__), "..", "db", "schema.sql")
-    with open(dir_path, "r", encoding="utf-8") as f:
-        sql = f.read()
-
-    # 按分号拆分，但忽略美元引号($$...$$)内的分号
-    statements = []
-    current = []
-    in_dollar = False
-    for line in sql.split("\n"):
-        if "$$" in line:
-            in_dollar = not in_dollar
-        current.append(line)
-        if not in_dollar and line.strip().endswith(";"):
-            statements.append("\n".join(current))
-            current = []
-
-    if current:
-        statements.append("\n".join(current))
-
-    async with engine.begin() as conn:
-        for stmt in statements:
-            stripped = stmt.strip()
-            if stripped:
-                await conn.exec_driver_sql(stripped)
-
-    # 数据迁移：给旧表加 session_type 字段
-    migration = """
+    # 第 1 步：给旧表加 session_type 列（如果不存在）
+    pre_migration = """
     DO $$
     BEGIN
         IF NOT EXISTS (
@@ -76,6 +51,31 @@ async def run_migrations():
     $$;
     """
     async with engine.begin() as conn:
-        await conn.exec_driver_sql(migration)
+        await conn.exec_driver_sql(pre_migration)
+
+    # 第 2 步：执行完整 schema.sql
+    dir_path = os.path.join(os.path.dirname(__file__), "..", "db", "schema.sql")
+    with open(dir_path, "r", encoding="utf-8") as f:
+        sql = f.read()
+
+    statements = []
+    current = []
+    in_dollar = False
+    for line in sql.split("\n"):
+        if "$$" in line:
+            in_dollar = not in_dollar
+        current.append(line)
+        if not in_dollar and line.strip().endswith(";"):
+            statements.append("\n".join(current))
+            current = []
+
+    if current:
+        statements.append("\n".join(current))
+
+    async with engine.begin() as conn:
+        for stmt in statements:
+            stripped = stmt.strip()
+            if stripped:
+                await conn.exec_driver_sql(stripped)
 
     print("数据库迁移完成")
