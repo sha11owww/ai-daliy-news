@@ -54,18 +54,38 @@ async def get_today_reports(db: AsyncSession = Depends(get_db)):
 
 
 def _load_from_json(report_date: date) -> dict:
-    """从本地 JSON 文件读取日报数据（兼容 GitHub Actions 产出）"""
+    """从本地 JSON 文件读取日报数据（兜底：从 GitHub 拉取并缓存）"""
     import json, os
     date_str = report_date.isoformat()
     result = {"morning": None, "evening": None}
     base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "reports"))
+
+    local_paths = {}
     for session in ("morning", "evening"):
         path = os.path.join(base, date_str, f"{session}.json")
+        local_paths[session] = path
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 data["session_type"] = session
                 result[session] = data
+
+    for session in ("morning", "evening"):
+        if result[session] is not None:
+            continue
+        try:
+            import httpx
+            url = f"https://raw.githubusercontent.com/sha11owww/ai-daliy-news/main/data/reports/{date_str}/{session}.json"
+            resp = httpx.get(url, timeout=5)
+            if resp.status_code == 200:
+                data = resp.json()
+                data["session_type"] = session
+                result[session] = data
+                os.makedirs(os.path.dirname(local_paths[session]), exist_ok=True)
+                with open(local_paths[session], "w", encoding="utf-8") as f:
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
     return result
 
 
