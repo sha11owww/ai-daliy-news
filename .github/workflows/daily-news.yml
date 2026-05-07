@@ -70,9 +70,8 @@ jobs:
           if git diff --staged --quiet; then
             echo "没有新数据，跳过提交"
           else
-            # 先拉取远端避免冲突
-            git pull --rebase origin main
             git commit -m "chore: $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M') 日报数据更新"
+            git pull --rebase origin main || echo "跳过拉取，直接推送"
             git push origin main
             echo "已提交并推送日报数据"
           fi
