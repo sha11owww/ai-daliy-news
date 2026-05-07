@@ -58,8 +58,9 @@ def _load_from_json(report_date: date) -> dict:
     import json, os
     date_str = report_date.isoformat()
     result = {"morning": None, "evening": None}
+    base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "reports"))
     for session in ("morning", "evening"):
-        path = os.path.join("data", "reports", date_str, f"{session}.json")
+        path = os.path.join(base, date_str, f"{session}.json")
         if os.path.exists(path):
             with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
@@ -156,6 +157,10 @@ async def get_report_by_date_and_session(
     result = await db.execute(text(stmt), {"date": parsed_date, "st": session})
     row = result.fetchone()
     if not row:
+        # 数据库无数据时尝试读 JSON 文件
+        json_data = _load_from_json(parsed_date).get(session)
+        if json_data:
+            return json_data
         return {"error": f"{report_date} {session}日报不存在"}, 404
     report = dict(row._mapping)
     art_stmt = "SELECT * FROM articles WHERE id = ANY(:ids) AND status = 'published'"
@@ -178,6 +183,13 @@ async def get_report_by_date(report_date: str, db: AsyncSession = Depends(get_db
     result = await db.execute(text(stmt), {"date": parsed_date})
     rows = result.fetchall()
     if not rows:
+        json_result = _load_from_json(parsed_date)
+        reports = []
+        for session in ("morning", "evening"):
+            if json_result.get(session):
+                reports.append(json_result[session])
+        if reports:
+            return reports
         return {"error": "日报不存在"}, 404
     reports = []
     for row in rows:
