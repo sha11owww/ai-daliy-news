@@ -7,7 +7,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
 
 from agent.state import DailyReportState, ArticleState
-from agent.tools import scan_sources, fetch_content, write_summary, classify
+from agent.tools import scan_sources, fetch_content, write_summary, classify, save_report
 from agent.reflection import critique_summary
 
 load_dotenv()
@@ -187,6 +187,13 @@ async def layout_node(state: DailyReportState) -> dict:
     }
 
 
+async def save_node(state: DailyReportState) -> dict:
+    """节点 8：Agent 自主保存结果到数据库/JSON"""
+    save_result = await save_report(state)
+    print(f"[save] {save_result.get('method', '?')} 保存完成: {save_result.get('total', 0)} 篇")
+    return {"status": "saved"}
+
+
 def should_reflect(state: DailyReportState) -> Literal["reflect", "classify"]:
     """条件边：是否启用反思步骤"""
     if os.getenv("REFLECTION_ENABLED", "true").lower() == "true":
@@ -206,6 +213,7 @@ def build_agent() -> StateGraph:
     builder.add_node("reflect", reflect_node)
     builder.add_node("classify", classify_node)
     builder.add_node("layout", layout_node)
+    builder.add_node("save", save_node)
 
     # 构建连接
     builder.add_edge(START, "collect")
@@ -215,6 +223,7 @@ def build_agent() -> StateGraph:
     builder.add_conditional_edges("summarize", should_reflect)
     builder.add_edge("reflect", "classify")
     builder.add_edge("classify", "layout")
-    builder.add_edge("layout", END)
+    builder.add_edge("layout", "save")
+    builder.add_edge("save", END)
 
     return builder.compile(checkpointer=MemorySaver())
