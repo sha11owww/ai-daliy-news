@@ -1,21 +1,44 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import type { Article as ArticleType } from '../api';
 import { fetchArticle } from '../api';
 
+const API_BASE = '/api';
+
 export default function Article() {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const [article, setArticle] = useState<ArticleType | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
-      fetchArticle(Number(id)).then((data) => {
-        setArticle(data);
-        setLoading(false);
-      });
+    async function load() {
+      // 方式1：通过数据库 ID 加载
+      if (id) {
+        const data = await fetchArticle(Number(id));
+        if (data) { setArticle(data); setLoading(false); return; }
+      }
+
+      // 方式2：通过日期+URL 从 JSON 查找
+      const date = searchParams.get('date');
+      const url = searchParams.get('url');
+      if (date && url) {
+        try {
+          const res = await fetch(`${API_BASE}/reports/${date}`);
+          const reports = await res.json();
+          if (Array.isArray(reports)) {
+            for (const r of reports) {
+              for (const a of (r.articles || [])) {
+                if (a.url === url) { setArticle(a); break; }
+              }
+            }
+          }
+        } catch {}
+      }
+      setLoading(false);
     }
-  }, [id]);
+    load();
+  }, [id, searchParams]);
 
   if (loading) {
     return (

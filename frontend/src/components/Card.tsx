@@ -6,9 +6,13 @@ interface CardProps {
 }
 
 export default function Card({ article, isHeadline }: CardProps) {
+  const detailUrl = article.id && article.id > 0
+    ? `/article/${article.id}`
+    : `/article?date=${article.published_date || ''}&url=${encodeURIComponent(article.url)}`;
+
   return (
     <a
-      href={`/article/${article.id}`}
+      href={detailUrl}
       className={`block no-underline rounded-xl border ${
         isHeadline
           ? 'bg-card border-border card-hover'

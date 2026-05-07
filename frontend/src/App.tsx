@@ -8,6 +8,7 @@ export default function App() {
     <div className="min-h-screen bg-paper">
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/article" element={<Article />} />
         <Route path="/article/:id" element={<Article />} />
         <Route path="/archive" element={<Archive />} />
       </Routes>
