@@ -33,24 +33,39 @@ async def get_today_reports(db: AsyncSession = Depends(get_db)):
     stmt = "SELECT * FROM daily_reports WHERE report_date = :today ORDER BY session_type"
     result = await db.execute(text(stmt), {"today": today})
     rows = result.fetchall()
-    if not rows:
-        return {"morning": None, "evening": None}
+    if rows:
+        reports = {}
+        for row in rows:
+            report = dict(row._mapping)
+            art_stmt = """
+                SELECT * FROM articles
+                WHERE id = ANY(:ids) AND status = 'published'
+            """
+            art_result = await db.execute(text(art_stmt), {"ids": report["article_order"]})
+            articles = [dict(r._mapping) for r in art_result.fetchall()]
+            id_order = report["article_order"]
+            article_map = {a["id"]: a for a in articles}
+            report["articles"] = [article_map[i] for i in id_order if i in article_map]
+            reports[report["session_type"]] = report
+        return {"morning": reports.get("morning"), "evening": reports.get("evening")}
 
-    reports = {}
-    for row in rows:
-        report = dict(row._mapping)
-        art_stmt = """
-            SELECT * FROM articles
-            WHERE id = ANY(:ids) AND status = 'published'
-        """
-        art_result = await db.execute(text(art_stmt), {"ids": report["article_order"]})
-        articles = [dict(r._mapping) for r in art_result.fetchall()]
-        id_order = report["article_order"]
-        article_map = {a["id"]: a for a in articles}
-        report["articles"] = [article_map[i] for i in id_order if i in article_map]
-        reports[report["session_type"]] = report
+    # 数据库无数据时，尝试从 JSON 文件读取
+    return _load_from_json(today)
 
-    return {"morning": reports.get("morning"), "evening": reports.get("evening")}
+
+def _load_from_json(report_date: date) -> dict:
+    """从本地 JSON 文件读取日报数据（兼容 GitHub Actions 产出）"""
+    import json, os
+    date_str = report_date.isoformat()
+    result = {"morning": None, "evening": None}
+    for session in ("morning", "evening"):
+        path = os.path.join("data", "reports", date_str, f"{session}.json")
+        if os.path.exists(path):
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                data["session_type"] = session
+                result[session] = data
+    return result
 
 
 @router.get("/today/morning")
