@@ -32,6 +32,8 @@ collector:
         - "https://36kr.com/feed"
         - "https://www.geekpark.net/rss"
         - "https://www.producthunt.com/feed?category=artificial-intelligence"
+        - "http://export.arxiv.org/rss/cs.AI"
+        - "https://blog.google/technology/ai/rss"
     twitter:
       enabled: false
 
