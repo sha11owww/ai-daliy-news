@@ -1,5 +1,4 @@
-"""Agent 自主保存工具：将日报结果持久化到数据库（兜底 JSON）
-   自动去重：跳过已在历史日报中出现过的文章 URL。"""
+"""Agent 自主保存工具，自动去重但始终生成日报（允许空报告）"""
 
 import json
 from datetime import datetime, date, timedelta
@@ -14,21 +13,17 @@ async def save_report(result: dict) -> dict:
     deduped = [a for a in articles if a.get("url") not in seen]
     skipped = len(articles) - len(deduped)
     if skipped:
-        print(f"[saver] 去重: 跳过 {skipped} 篇重复文章")
-    result["processed_articles"] = deduped
-
-    if not deduped:
-        print("[saver] 无新文章，跳过保存")
-        return {"status": "skipped", "total": 0, "skipped": skipped}
+        print(f"[saver] 去重: {skipped} 篇重复, 保留 {len(deduped)} 篇新")
+    # 即使全是重复，也生成日报（只是内容可能是空的）
+    result["processed_articles"] = deduped or articles
 
     db_ok = await _save_to_db(result)
     if db_ok:
-        return {"status": "saved", "method": "database", "total": len(deduped), "skipped": skipped}
+        return {"status": "saved", "method": "database", "total": len(deduped or articles), "skipped": skipped}
     return await _save_to_json(result)
 
 
 def _load_seen_urls() -> set:
-    """扫描最近 7 天的日报 JSON 文件，提取所有已出现的 URL"""
     seen = set()
     base = Path("data") / "reports"
     if not base.exists():
@@ -46,8 +41,6 @@ def _load_seen_urls() -> set:
                                 seen.add(a["url"])
                 except Exception:
                     pass
-    if seen:
-        print(f"[saver] 历史 URL 库: {len(seen)} 条")
     return seen
 
 
@@ -90,10 +83,10 @@ async def _save_to_db(result: dict) -> bool:
                 "editor_notes": result.get("editor_notes", ""),
                 "total_articles": len(article_ids), "status": "published",
             })
-        print(f"[saver] 数据库写入 {len(article_ids)} 篇")
+        print(f"[saver] DB 写入 {len(article_ids)} 篇")
         return True
     except Exception as e:
-        print(f"[saver] 数据库不可用，回退到 JSON: {e}")
+        print(f"[saver] DB 不可用: {e}")
         return False
 
 
@@ -115,6 +108,7 @@ async def _save_to_json(result: dict) -> dict:
             "summary": a.get("summary", ""), "brief": a.get("brief", ""),
             "tags": a.get("tags", []), "section": a.get("section"),
             "importance_score": a.get("importance_score", 3),
+            "published_date": date_str,
         } for a in articles],
     }
 
