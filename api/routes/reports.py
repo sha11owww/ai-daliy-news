@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from collections import defaultdict
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -34,17 +34,16 @@ async def get_today_reports(db: AsyncSession = Depends(get_db)):
             r["articles"] = [amap[i] for i in r["article_order"] if i in amap]
             reports[r["session_type"]] = r
         return {"morning": reports.get("morning"), "evening": reports.get("evening")}
-    # 本地 JSON 兜底
     return _load_from_json(today)
 
 
 def _load_from_json(report_date: date) -> dict:
     import json, os
-    date_str = report_date.isoformat()
+    ds = report_date.isoformat()
     base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "reports"))
     result = {"morning": None, "evening": None}
     for s in ("morning", "evening"):
-        p = os.path.join(base, date_str, f"{s}.json")
+        p = os.path.join(base, ds, f"{s}.json")
         if os.path.exists(p):
             with open(p, "r", encoding="utf-8") as f:
                 d = json.load(f)
@@ -58,14 +57,24 @@ async def get_calendar(year: int = Query(default=None), month: int = Query(defau
     today = date.today()
     y = year or today.year
     m = month or today.month
-    start_date = date(y, m, 1)
-    end_date = date(y + 1, 1, 1) if m == 12 else date(y, m + 1, 1)
+    s = date(y, m, 1)
+    e = date(y + 1, 1, 1) if m == 12 else date(y, m + 1, 1)
     rows = (await db.execute(
-        text("SELECT report_date,session_type FROM daily_reports WHERE status='published' AND report_date>=:start AND report_date<:end ORDER BY report_date DESC,session_type"),
-        {"start": start_date, "end": end_date})).fetchall()
+        text("SELECT report_date,session_type FROM daily_reports WHERE status='published' AND report_date>=:s AND report_date<:e ORDER BY report_date DESC,session_type"),
+        {"s": s, "e": e})).fetchall()
     grouped = defaultdict(list)
     for row in rows:
         grouped[str(row.report_date)].append(row.session_type)
+    # 补充 JSON 文件中的日报
+    import os
+    base = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data", "reports"))
+    d = s
+    while d < e:
+        ds = d.isoformat()
+        for sess in ("morning", "evening"):
+            if os.path.exists(os.path.join(base, ds, f"{sess}.json")) and sess not in grouped[ds]:
+                grouped[ds].append(sess)
+        d += timedelta(days=1)
     return [{"date": d, "sessions": sorted(set(v))} for d, v in grouped.items()]
 
 
