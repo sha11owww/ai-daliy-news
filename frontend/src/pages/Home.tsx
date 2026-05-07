@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type { DailyReport } from '../api';
 import { fetchTodayReport } from '../api';
 import Header from '../components/Header';
@@ -7,7 +7,6 @@ import Card from '../components/Card';
 import Calendar from '../components/Calendar';
 
 const API_BASE = '/api';
-
 type SessionTab = 'morning' | 'evening';
 
 export default function Home() {
@@ -18,6 +17,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<string | null>(null);
   const [prevReports, setPrevReports] = useState<{morning: DailyReport|null; evening: DailyReport|null}>({morning: null, evening: null});
+  const fetchingRef = useRef<string | null>(null);
 
   useEffect(() => {
     fetchTodayReport().then((data) => {
@@ -31,19 +31,25 @@ export default function Home() {
 
   const handleCalendarSelect = useCallback(async (dateStr: string) => {
     if (dateStr === selectedCalendarDate) return;
-    // 保存当前数据，以便恢复
+
     setPrevReports({morning: morningReport, evening: eveningReport});
     setSelectedCalendarDate(dateStr);
     setActiveSection(null);
 
+    // 标记当前请求，忽略过期响应
+    fetchingRef.current = dateStr;
     try {
       const res = await fetch(`${API_BASE}/reports/${dateStr}`);
+      if (fetchingRef.current !== dateStr) return; // 已被新请求替代
       if (!res.ok) { setMorningReport(null); setEveningReport(null); return; }
       const reports: DailyReport[] = await res.json();
+      if (fetchingRef.current !== dateStr) return;
       setMorningReport(reports.find((r) => r.session_type === 'morning') || null);
       setEveningReport(reports.find((r) => r.session_type === 'evening') || null);
     } catch {
-      setMorningReport(null); setEveningReport(null);
+      if (fetchingRef.current === dateStr) {
+        setMorningReport(null); setEveningReport(null);
+      }
     }
   }, [selectedCalendarDate, morningReport, eveningReport]);
 
@@ -92,12 +98,10 @@ export default function Home() {
     if (!report) {
       return <p className="text-ink-light text-lg text-center py-12">{activeSession === 'morning' ? '早报' : '晚报'}暂无内容</p>;
     }
-
     const sections = report.sections || [];
-    const headlines = report.articles?.filter((a) => a.importance_score >= 4) || [];
-    const others = report.articles?.filter((a) => a.importance_score < 4) || [];
-    const filteredOthers = activeSection ? others.filter((a) => a.section === activeSection) : others;
-
+    const headlines = report.articles?.filter((a: any) => a.importance_score >= 4) || [];
+    const others = report.articles?.filter((a: any) => a.importance_score < 4) || [];
+    const filteredOthers = activeSection ? others.filter((a: any) => a.section === activeSection) : others;
     return (
       <>
         {sections.length > 0 && (
@@ -107,17 +111,12 @@ export default function Home() {
         )}
         {headlines.length > 0 && !activeSection && (
           <section className="mb-8"><div className="flex flex-col gap-4">
-            {headlines.map((article) => (<Card key={article.id} article={article} isHeadline />))}
+            {headlines.map((article: any) => (<Card key={article.id} article={article} isHeadline />))}
           </div></section>
         )}
         <section>
-          {sections.length > 0 && !activeSection && (
-            <div className="flex gap-2 mb-4 text-xs text-ink-light">
-              {sections.map((s: { name: string }) => (<span key={s.name} className="bg-card px-2 py-0.5 rounded">📂 {s.name}</span>))}
-            </div>
-          )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {(activeSection ? filteredOthers : others).map((article) => (<Card key={article.id} article={article} />))}
+            {(activeSection ? filteredOthers : others).map((article: any) => (<Card key={article.id} article={article} />))}
           </div>
         </section>
         <footer className="mt-8 pt-4 border-t border-border text-center text-xs text-ink-light">本日共 {report.total_articles} 篇 · 由 AI 自动整理</footer>
