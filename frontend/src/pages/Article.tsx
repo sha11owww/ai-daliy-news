@@ -13,23 +13,27 @@ export default function Article() {
 
   useEffect(() => {
     async function load() {
+      const urlParam = searchParams.get('url');
+
       // 方式1：通过数据库 ID 加载
-      if (id) {
+      if (id && !urlParam) {
         const data = await fetchArticle(Number(id));
         if (data) { setArticle(data); setLoading(false); return; }
       }
 
-      // 方式2：通过日期+URL 从 JSON 查找
-      const date = searchParams.get('date');
-      const url = searchParams.get('url');
-      if (date && url) {
+      // 方式2：通过 URL 从当天及历史日报 JSON 中查找
+      if (urlParam) {
         try {
-          const res = await fetch(`${API_BASE}/reports/${date}`);
+          const res = await fetch(`${API_BASE}/reports/`);
           const reports = await res.json();
-          if (Array.isArray(reports)) {
-            for (const r of reports) {
-              for (const a of (r.articles || [])) {
-                if (a.url === url) { setArticle(a); break; }
+          // 遍历近 7 天日报
+          for (const r of reports.slice(0, 14)) {
+            const detailRes = await fetch(`${API_BASE}/reports/${r.report_date}`);
+            const dayReports = await detailRes.json();
+            const list = Array.isArray(dayReports) ? dayReports : [dayReports];
+            for (const day of list) {
+              for (const a of (day.articles || [])) {
+                if (a.url === urlParam) { setArticle(a); setLoading(false); return; }
               }
             }
           }
@@ -74,7 +78,6 @@ export default function Article() {
         </h1>
 
         <div className="flex items-center gap-4 text-sm text-ink-light mb-8">
-          <time>{article.published_date}</time>
           <span>📰 {article.source}</span>
           <a
             href={article.url}
