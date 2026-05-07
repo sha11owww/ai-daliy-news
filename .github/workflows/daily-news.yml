@@ -55,8 +55,6 @@ jobs:
       - name: 运行日报生成
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          HTTPS_PROXY: ${{ secrets.HTTPS_PROXY }}
-          HTTP_PROXY: ${{ secrets.HTTPS_PROXY }}
         run: |
           SESSION="${{ github.event.inputs.session || steps.session.outputs.type }}"
           echo "生成时段: $SESSION"
