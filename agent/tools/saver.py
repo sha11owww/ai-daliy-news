@@ -1,7 +1,5 @@
-"""Agent 自主保存，同日去重（跨天允许重复，因为 arXiv 每日更新）"""
-
 import json
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 
@@ -20,7 +18,6 @@ async def save_report(result: dict) -> dict:
 
 
 def _load_seen_urls() -> set:
-    """只加载今日已有文章的 URL（防早晚重复，不跨天）"""
     seen = set()
     base = Path("data") / "reports" / date.today().isoformat()
     if not base.exists():
@@ -87,14 +84,13 @@ async def _save_to_json(result: dict) -> dict:
         "report_date": ds, "session_type": st, "title": title,
         "total_articles": len(articles), "sections": result.get("sections", []),
         "editor_notes": result.get("editor_notes", ""), "status": "published",
-        "generated_at": str(datetime.now()),
+        "generated_at": datetime.now().isoformat(),
         "articles": [{"title": a.get("title", ""), "url": a.get("url", ""), "source": a.get("source", ""),
             "summary": a.get("summary", ""), "brief": a.get("brief", ""),
             "tags": a.get("tags", []), "section": a.get("section"),
             "importance_score": a.get("importance_score", 3), "published_date": ds,
         } for a in articles],
     }
-    from datetime import datetime
     data_dir = Path("data") / "reports" / ds
     data_dir.mkdir(parents=True, exist_ok=True)
     with open(data_dir / f"{st}.json", "w", encoding="utf-8") as f:
